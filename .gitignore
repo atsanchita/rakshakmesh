@@ -8,3 +8,5 @@ build/
 captures/
 .externalNativeBuild/
 .cxx/
+backend/node_modules/
+backend/.env
