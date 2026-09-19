@@ -1,8 +1,8 @@
 # 🚨 RakshakMesh
 
-### An Offline-First Emergency Communication and Response Network for Disaster Resilience
+### An Offline-First Emergency Communication and Response Network for Disaster Resilience 
 
-> **"When the network fails, the lifeline stays connected."**
+> **"When the network fails, the lifeline stays connected throught RakshakMesh"**
 
 RakshakMesh is an **offline-first emergency communication and response system** designed for disaster situations where conventional internet and cellular connectivity may become unavailable, unreliable, or congested.
 
