@@ -1161,18 +1161,12 @@ The central idea is simple:
 
 Connectivity should be treated as an opportunity, not a prerequisite for capturing emergency information.
 
-👥 Team
-Team NEMORA
-
 Project: RakshakMesh
 
 Tagline:
 
 When the network fails, the lifeline stays connected.
 
-Team Members
-Sanchita Warkad
-Abhishek Vishwakarma
 🌐 Project Vision
 
 RakshakMesh is built around a simple long-term vision:
@@ -1198,5 +1192,4 @@ RakshakMesh aims to create a more resilient emergency communication and response
 🚨 RakshakMesh
 When the network fails, the lifeline stays connected.
 
-Built by Team NEMORA
 
