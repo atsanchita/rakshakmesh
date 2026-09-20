@@ -1,0 +1,73 @@
+name: Android First Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Build debug APK
+        run: ./gradlew :app:assembleDebug
+
+      - name: Prepare APK for publishing
+        id: prepare_apk
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          APK_PATH="$(find app/build/outputs/apk/debug -maxdepth 1 -name "*.apk" | head -n 1 || true)"
+          if [[ -z "${APK_PATH}" ]]; then
+            echo "No debug APK produced under app/build/outputs/apk/debug."
+            exit 1
+          fi
+
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            RELEASE_NAME="rakshakmesh-${GITHUB_REF_NAME}-debug.apk"
+            IS_TAG_RUN="true"
+          else
+            VERSION_NAME="$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts | head -n 1)"
+            VERSION_CODE="$(grep -oP 'versionCode\s*=\s*\K[0-9]+' app/build.gradle.kts | head -n 1)"
+            RELEASE_NAME="rakshakmesh-v${VERSION_NAME}-vc${VERSION_CODE}-debug.apk"
+            IS_TAG_RUN="false"
+          fi
+
+          mkdir -p dist
+          cp "${APK_PATH}" "dist/${RELEASE_NAME}"
+
+          echo "apk_path=dist/${RELEASE_NAME}" >> "${GITHUB_OUTPUT}"
+          echo "apk_name=${RELEASE_NAME}" >> "${GITHUB_OUTPUT}"
+          echo "is_tag_run=${IS_TAG_RUN}" >> "${GITHUB_OUTPUT}"
+
+      - name: Create GitHub Release and attach APK
+        if: steps.prepare_apk.outputs.is_tag_run == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.prepare_apk.outputs.apk_path }}
+
+      - name: Upload APK artifact for manual run
+        if: steps.prepare_apk.outputs.is_tag_run != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.prepare_apk.outputs.apk_name }}
+          path: ${{ steps.prepare_apk.outputs.apk_path }}
+          if-no-files-found: error

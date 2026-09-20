@@ -597,6 +597,24 @@ private val backendUrl =
 
 Do not commit private or environment-specific credentials.
 
+### First GitHub APK release (MVP)
+
+Use `.github/workflows/android-first-release.yml` to share the first installable APK through GitHub.
+
+1. Merge this workflow into `main`.
+2. Create and push a version tag (example):
+   - `git tag v1.0.0`
+   - `git push origin v1.0.0`
+3. The workflow builds `:app:assembleDebug`, renames the APK to `rakshakmesh-v1.0.0-debug.apk`, and publishes it in the corresponding GitHub Release.
+4. Download the APK from **GitHub Releases** and install it on Android (enable install from unknown sources if prompted).
+
+For manual `workflow_dispatch` runs, the workflow uploads the APK as an **Actions artifact** (it does not create a GitHub Release).
+
+Important signing note:
+- Android updates must always be signed with the same key to install over an existing app.
+- This first-release flow intentionally uses debug signing for early testing and sharing only.
+- For production/public distribution, configure a dedicated release signing key with repository secrets and build a signed release artifact.
+
 ☁️ Backend
 
 Navigate to the backend:
@@ -1191,5 +1209,4 @@ RakshakMesh aims to create a more resilient emergency communication and response
 
 🚨 RakshakMesh
 When the network fails, the lifeline stays connected.
-
 
