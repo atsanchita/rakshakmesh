@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
 // =========================================================
 
     private val backendUrl =
-        "http://192.168.1.9:5000/api/v1/sos"
+        "https://rakshakmesh-api.onrender.com/api/v1/sos"
     private var gatewayMode by mutableStateOf(false)
     private var gatewaySyncing by mutableStateOf(false)
 
